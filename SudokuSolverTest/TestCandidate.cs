@@ -56,7 +56,6 @@ namespace SudokuSolverTest
             Assert.AreEqual("", tgt.ToString());
         }
 
-#if true
         /// <summary> <!-- {{{1 --> add function
         /// </summary>
         [Test]
@@ -79,9 +78,7 @@ namespace SudokuSolverTest
             Assert.IsFalse(tgt.Add(new Value(SudokuValue._9)));
             Assert.AreEqual(3, tgt.Count());
         }
-#endif
 
-#if true
         /// <summary> <!-- {{{1 --> remove function
         /// </summary>
         [Test]
@@ -103,7 +100,6 @@ namespace SudokuSolverTest
             Assert.IsTrue(tgt.Remove(new Value(SudokuValue._3)));
             Assert.AreEqual(6, tgt.Count());
         }
-#endif
     }
 }
 
