@@ -111,7 +111,7 @@ namespace SudokuSolverTest
                     var idx = index_list[x][y];
                     var exp = this.board[idx];
                     var ans = cells.ElementAt(y);
-                    Assert.IsTrue(exp.Equals(ans));
+                    Assert.IsTrue(exp.Equals(ans), "Invalid cell: {0}: {1}", x, y);
                 }
             }
         }

@@ -62,21 +62,15 @@ namespace SudokuSolverTest
         public void TestAdd()
         {
             // invalid case: add not contained value
-            Assert.IsTrue(tgt.Add(new Value(SudokuValue._1)));
-            Assert.AreEqual(9, tgt.Count());
-            Assert.IsTrue(tgt.Add(new Value(SudokuValue._2)));
-            Assert.AreEqual(9, tgt.Count());
-            Assert.IsTrue(tgt.Add(new Value(SudokuValue._9)));
-            Assert.AreEqual(9, tgt.Count());
+            Assert.IsTrue(tgt.Add(SudokuValue._1)); Assert.AreEqual(9, tgt.Count());
+            Assert.IsTrue(tgt.Add(SudokuValue._2)); Assert.AreEqual(9, tgt.Count());
+            Assert.IsTrue(tgt.Add(SudokuValue._9)); Assert.AreEqual(9, tgt.Count());
 
             // valid case: add already contained value
             tgt.Clear();
-            Assert.IsFalse(tgt.Add(new Value(SudokuValue._1)));
-            Assert.AreEqual(1, tgt.Count());
-            Assert.IsFalse(tgt.Add(new Value(SudokuValue._2)));
-            Assert.AreEqual(2, tgt.Count());
-            Assert.IsFalse(tgt.Add(new Value(SudokuValue._9)));
-            Assert.AreEqual(3, tgt.Count());
+            Assert.IsFalse(tgt.Add(SudokuValue._1)); Assert.AreEqual(1, tgt.Count());
+            Assert.IsFalse(tgt.Add(SudokuValue._2)); Assert.AreEqual(2, tgt.Count());
+            Assert.IsFalse(tgt.Add(SudokuValue._9)); Assert.AreEqual(3, tgt.Count());
         }
 
         /// <summary> <!-- {{{1 --> remove function
@@ -85,20 +79,14 @@ namespace SudokuSolverTest
         public void TestRemove()
         {
             // valid case: remove already contained value
-            Assert.IsFalse(tgt.Remove(new Value(SudokuValue._1)));
-            Assert.AreEqual(8, tgt.Count());
-            Assert.IsFalse(tgt.Remove(new Value(SudokuValue._2)));
-            Assert.AreEqual(7, tgt.Count());
-            Assert.IsFalse(tgt.Remove(new Value(SudokuValue._3)));
-            Assert.AreEqual(6, tgt.Count());
+            Assert.IsFalse(tgt.Remove(SudokuValue._1)); Assert.AreEqual(8, tgt.Count());
+            Assert.IsFalse(tgt.Remove(SudokuValue._2)); Assert.AreEqual(7, tgt.Count());
+            Assert.IsFalse(tgt.Remove(SudokuValue._3)); Assert.AreEqual(6, tgt.Count());
 
             // invalid case: remove not contained value
-            Assert.IsTrue(tgt.Remove(new Value(SudokuValue._1)));
-            Assert.AreEqual(6, tgt.Count());
-            Assert.IsTrue(tgt.Remove(new Value(SudokuValue._2)));
-            Assert.AreEqual(6, tgt.Count());
-            Assert.IsTrue(tgt.Remove(new Value(SudokuValue._3)));
-            Assert.AreEqual(6, tgt.Count());
+            Assert.IsTrue(tgt.Remove(SudokuValue._1)); Assert.AreEqual(6, tgt.Count());
+            Assert.IsTrue(tgt.Remove(SudokuValue._2)); Assert.AreEqual(6, tgt.Count());
+            Assert.IsTrue(tgt.Remove(SudokuValue._3)); Assert.AreEqual(6, tgt.Count());
         }
     }
 }

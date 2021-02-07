@@ -15,21 +15,15 @@ namespace SudokuSolver
     public class Candidates
     {
 
-        /// <summary> <!-- {{{1 --> All available values
-        /// </summary>
-        private static readonly SudokuValue[] CELL_VALUES = new int[] {
-            1, 2, 3, 4, 5, 6, 7, 8, 9}.Select(x => (SudokuValue)x).ToArray();
-
         /// <summary> <!-- {{{1 --> Internal candidates
         /// </summary>
-        private readonly HashSet<Value> values;
+        private readonly HashSet<SudokuValue> values;
 
         /// <summary> <!-- {{{1 --> Constructor
         /// </summary>
         public Candidates()
         {
-            this.values = new HashSet<Value>(
-                CELL_VALUES.Select(x => new Value(x)) );
+            this.values = new HashSet<SudokuValue>();
         }
 
         /// <summary> <!-- {{{1 --> Show current candidates
@@ -37,7 +31,7 @@ namespace SudokuSolver
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Join("-", values.Select(x => x.ToString()));
+            return string.Join("-", values.Select(x => x.ToStr()));
         }
 
         /// <summary> <!-- {{{1 --> Copy members from specified Candidates instance.
@@ -46,11 +40,9 @@ namespace SudokuSolver
         public void CopyFrom(Candidates src)
         {
             this.values.Clear();
-            foreach (var i in src.values)
+            foreach (var v in src.values)
             {
-                var v = new Value(SudokuValue.NA);
-                v.CopyFrom(i);
-                this.values.Add(v);
+                this.Add(v);
             }
         }
 
@@ -65,28 +57,32 @@ namespace SudokuSolver
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public bool Add(Value v)
+        public bool Add(SudokuValue v)
         {
-            if (values.Any(x => x.Equals(v)))
+            return !values.Add(v);
+        }
+
+        /// <summary> <!-- {{{1 --> Add specified candidate list
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public bool Add(IEnumerable<SudokuValue> values)
+        {
+            bool ret = false;
+            foreach (var v in values)
             {
-                return true;
+                ret |= Add(v);
             }
-            values.Add(v);
-            return false;
+            return ret;
         }
 
         /// <summary> <!-- {{{1 --> Remove specified candidate
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public bool Remove(Value v)
+        public bool Remove(SudokuValue v)
         {
-            if (!values.Any(x => x.Equals(v)))
-            {
-                return true;
-            }
-            values.RemoveWhere(x => x.Equals(v));
-            return false;
+            return !values.Remove(v);
         }
 
         /// <summary> <!-- {{{1 --> Aquire current count of candidates
@@ -95,6 +91,18 @@ namespace SudokuSolver
         public int Count()
         {
             return values.Count();
+        }
+
+        /// <summary> <!-- {{{1 --> Convert values to candidates
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Candidates ToCandidates(IEnumerable<SudokuValue> values)
+        {
+            var candidates = SudokuValueExtension.ValueList().Except(values);
+            var ret = new Candidates();
+            ret.Add(candidates);
+            return ret;
         }
 
     }

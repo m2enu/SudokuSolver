@@ -4,6 +4,10 @@
  * https://github.com/m2enu/SudokuSolver/blob/master/LICENSE.txt
  ******************************************************************************/
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SudokuSolver
 {
@@ -12,12 +16,19 @@ namespace SudokuSolver
     /// </summary>
     public class Path
     {
-        private readonly Sudoku puzzle;
 
-        public Path()
+        /// <summary> <!-- {{{1 --> Remaining cell to be updated
+        /// </summary>
+        public readonly ReadOnlyCollection<Cell> CellsToBeUpdate;
+
+        /// <summary> <!-- {{{1 --> Constructor
+        /// </summary>
+        /// <param name="cells"></param>
+        public Path(IEnumerable<Cell> cells)
         {
-            this.puzzle = new Sudoku();
+            this.CellsToBeUpdate = new ReadOnlyCollection<Cell>(cells.ToList());
         }
+
     }
 
 }

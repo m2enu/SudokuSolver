@@ -41,6 +41,18 @@ namespace SudokuSolver
             return (SudokuHouseIndex._1 > self) || (SudokuHouseIndex._9 < self);
         }
 
+        /// <summary> <!-- {{{1 --> Throw exception when specified index is invalid.
+        /// </summary>
+        /// <param name="self"></param>
+        public static void AssertWhenInvalid(this SudokuHouseIndex self)
+        {
+            if (self.IsInvalid())
+            {
+                var msg = string.Format("Invalid house index: {0}", self.ToInt());
+                throw new ArgumentOutOfRangeException(msg);
+            }
+        }
+
         /// <summary> <!-- {{{1 --> Convert the house index to Integer
         /// </summary>
         /// <param name="self"></param>
@@ -48,6 +60,15 @@ namespace SudokuSolver
         public static int ToInt(this SudokuHouseIndex self)
         {
             return (int)self;
+        }
+
+        /// <summary> <!-- {{{1 --> Convert the house index to String
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        public static string ToStr(this SudokuHouseIndex self)
+        {
+            return self.ToInt().ToString();
         }
 
         /// <summary> <!-- {{{1 --> Convert house index to cell indexes in row.
@@ -112,17 +133,44 @@ namespace SudokuSolver
                 .Aggregate((a, b) => a + b);
         }
 
+        /// <summary> <!-- {{{1 --> Load sudoku cell value from string
+        /// </summary>
+        /// <param name="pat"></param>
+        /// <returns></returns>
+        public bool LoadFromStr(string pat)
+        {
+            if ((SudokuCellIndex.MAX - SudokuCellIndex.MIN + 1) > pat.Length)
+            {
+                return true;
+            }
+            var vals = SudokuCellIndexExtension.IndexList()
+                .Select(x => SudokuValueExtension.FromStr(
+                    pat.Substring((int)x, 1)));
+            var items = this.board.Zip(vals, (c, v) => new {Cell = c, Val = v});
+            foreach (var i in items)
+            {
+                i.Cell.CopyFrom(i.Val);
+            }
+            return false;
+        }
+
+        /// <summary> <!-- {{{1 --> Get cell from cell index
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        public Cell CellFromIndex(SudokuCellIndex idx)
+        {
+            idx.AssertWhenInvalid();
+            return this.board.ElementAt(idx.ToInt());
+        }
+
         /// <summary> <!-- {{{1 --> Get cells from row index
         /// </summary>
         /// <param name="idx"></param>
         /// <returns></returns>
         public IEnumerable<Cell> CellsFromRow(SudokuHouseIndex idx)
         {
-            if (idx.IsInvalid())
-            {
-                // FIXME: add exception message
-                throw new ArgumentOutOfRangeException();
-            }
+            idx.AssertWhenInvalid();
             return idx.ToCellsIndexInRow().Select(x => this.board.ElementAt(x.ToInt()));
         }
 
@@ -132,11 +180,7 @@ namespace SudokuSolver
         /// <returns></returns>
         public IEnumerable<Cell> CellsFromCol(SudokuHouseIndex idx)
         {
-            if (idx.IsInvalid())
-            {
-                // FIXME: add exception message
-                throw new ArgumentOutOfRangeException();
-            }
+            idx.AssertWhenInvalid();
             return idx.ToCellsIndexInCol().Select(x => this.board.ElementAt(x.ToInt()));
         }
 
@@ -146,12 +190,37 @@ namespace SudokuSolver
         /// <returns></returns>
         public IEnumerable<Cell> CellsFromBox(SudokuHouseIndex idx)
         {
-            if (idx.IsInvalid())
-            {
-                // FIXME: add exception message
-                throw new ArgumentOutOfRangeException();
-            }
+            idx.AssertWhenInvalid();
             return idx.ToCellsIndexInBox().Select(x => this.board.ElementAt(x.ToInt()));
+        }
+
+        /// <summary> <!-- {{{1 --> Get cells from house index
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        public IEnumerable<Cell> CellsFromHouse(SudokuHouseIndex idx)
+        {
+            idx.AssertWhenInvalid();
+            return CellsFromRow(idx)
+                .Concat(CellsFromCol(idx))
+                .Concat(CellsFromBox(idx));
+        }
+
+        /// <summary> <!-- {{{1 --> Convert to the path
+        /// </summary>
+        /// <returns></returns>
+        public Path ToPath()
+        {
+            var ret = new List<Cell>();
+            foreach (var c in SudokuCellIndexExtension.IndexList())
+            {
+                var h = SudokuCellIndexExtension.ToHouseIndex(c);
+                var cellsInHouse = CellsFromHouse(h);
+                var cell = this.board.ElementAt((int)c);
+                var updatedCell = cell.ToUpdatedCell(cellsInHouse);
+                ret.Add(updatedCell);
+            }
+            return new Path(ret);
         }
 
     }
