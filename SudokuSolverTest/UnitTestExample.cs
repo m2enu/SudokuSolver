@@ -3,29 +3,34 @@
  * Released under the MIT License
  * https://github.com/m2enu/SudokuSolver/blob/master/LICENSE.txt
  ******************************************************************************/
-using NUnit.Framework;
+using System;
+using Xunit;
 
 namespace SudokuSolverTest
 {
 
     /// <summary> <!-- {{{1 --> example unittest class
     /// </summary>
-    public class TestExample
+    public class TestExample: IDisposable
     {
 
         /// <summary> <!-- {{{1 --> setup
         /// </summary>
-        [SetUp]
-        public void Setup()
+        public TestExample()
+        {
+        }
+
+        /// <summary> <!-- {{{1 --> teardown
+        /// </summary>
+        public void Dispose()
         {
         }
 
         /// <summary> <!-- {{{1 --> example unittest
         /// </summary>
-        [Test]
+        [Fact]
         public void Test1()
         {
-            Assert.Pass();
         }
     }
 }

@@ -3,37 +3,42 @@
  * Released under the MIT License
  * https://github.com/m2enu/SudokuSolver/blob/master/LICENSE.txt
  ******************************************************************************/
-using NUnit.Framework;
-using SudokuSolver;
+using System;
 using System.Linq;
+using Xunit;
+using SudokuSolver;
 
 namespace SudokuSolverTest
 {
 
     /// <summary> <!-- {{{1 --> Sudoku cell test
     /// </summary>
-    public class TestCell
+    public class TestCell: IDisposable
     {
 
         /// <summary> <!-- {{{1 --> setup
         /// </summary>
-        [SetUp]
-        public void Setup()
+        public TestCell()
+        {
+        }
+
+        /// <summary> <!-- {{{1 --> teardown
+        /// </summary>
+        public void Dispose()
         {
         }
 
         /// <summary> <!-- {{{1 --> example unittest
         /// </summary>
-        [Test]
+        [Fact]
         public void Test1()
         {
-            Assert.Pass();
         }
     }
 
     /// <summary> <!-- {{{1 --> Test for SudokuCellExtension class
     /// </summary>
-    public class TestCellExtension
+    public class TestCellExtension: IDisposable
     {
 
         /// <summary> <!-- {{{1 --> Test target
@@ -42,15 +47,21 @@ namespace SudokuSolverTest
 
         /// <summary> <!-- {{{1 --> Setup
         /// </summary>
-        [SetUp]
-        public void SetUp()
+        public TestCellExtension()
+        {
+            tgt = SudokuCellIndex.MIN;
+        }
+
+        /// <summary> <!-- {{{1 --> teardown
+        /// </summary>
+        public void Dispose()
         {
             tgt = SudokuCellIndex.MIN;
         }
 
         /// <summary> <!-- {{{1 --> Test for ToHouseIndex
         /// </summary>
-        [Test]
+        [Fact]
         public void TestToHouseIndex()
         {
             var exps = new int[] {
@@ -69,7 +80,7 @@ namespace SudokuSolverTest
                 tgt = (SudokuCellIndex)i;
                 var ans = tgt.ToHouseIndex();
                 var exp = exps.ElementAt(i);
-                Assert.AreEqual(exp, ans, "{0}: {1} != {2}", i, exp.ToStr(), ans.ToStr());
+                Assert.Equal(exp, ans);
             }
         }
 

@@ -3,39 +3,38 @@
  * Released under the MIT License
  * https://github.com/m2enu/SudokuSolver/blob/master/LICENSE.txt
  ******************************************************************************/
-using NUnit.Framework;
-using SudokuSolver;
+using System;
 using System.Linq;
+using Xunit;
+using SudokuSolver;
 
 namespace SudokuSolverTest
 {
 
     /// <summary> <!-- {{{1 --> Test for SolverFullHouse class
     /// </summary>
-    public class TestSolverFullHouse
+    public class TestSolverFullHouse: IDisposable
     {
 
         private SolverFullHouse tgt;
 
         /// <summary> <!-- {{{1 --> setup
         /// </summary>
-        [SetUp]
-        public void Setup()
+        public TestSolverFullHouse()
         {
             tgt = new SolverFullHouse();
         }
 
         /// <summary> <!-- {{{1 --> teardown
         /// </summary>
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             tgt = null;
         }
 
         /// <summary> <!-- {{{1 --> Candidate in only one house
         /// </summary>
-        [Test]
+        [Fact]
         public void TestOnlyInOneHouse()
         {
             var pat = string.Join("",
@@ -51,10 +50,10 @@ namespace SudokuSolverTest
             );
             var puzzle = new Sudoku();
             puzzle.LoadFromStr(pat);
-            Assert.AreEqual(pat, puzzle.ToString());
+            Assert.Equal(pat, puzzle.ToString());
 
             var result = tgt.Solve(puzzle);
-            Assert.AreEqual(SolvingTechnique.FullHouse, result.Technique);
+            Assert.Equal(SolvingTechnique.FullHouse, result.Technique);
         }
     }
 }

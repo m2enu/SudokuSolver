@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 using SudokuSolver;
 
 namespace SudokuSolverTest
@@ -14,8 +14,7 @@ namespace SudokuSolverTest
 
     /// <summary> <!-- {{{1 --> Sudoku class test
     /// </summary>
-    [TestFixture]
-    public class TestSudoku
+    public class TestSudoku: IDisposable
     {
 
         /// <summary> <!-- {{{1 --> test target
@@ -24,23 +23,21 @@ namespace SudokuSolverTest
 
         /// <summary> <!-- {{{1 --> setup
         /// </summary>
-        [SetUp]
-        public void Setup()
+        public TestSudoku()
         {
             tgt = new Sudoku();
         }
 
         /// <summary> <!-- {{{1 --> teardown
         /// </summary>
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             tgt = null;
         }
 
         /// <summary> <!-- {{{1 --> Verify ToString
         /// </summary>
-        [Test]
+        [Fact]
         public void TestToString()
         {
             var exp = string.Join("",
@@ -53,42 +50,39 @@ namespace SudokuSolverTest
                 ".........",
                 ".........",
                 ".........");
-            Assert.AreEqual(exp, tgt.ToString());
+            Assert.Equal(exp, tgt.ToString());
         }
 
     }
 
     /// <summary> <!-- {{{1 --> Test internal members/functions of Sudoku class
     /// </summary>
-    [TestFixture]
-    public class TestSudokuInternal: Sudoku
+    public class TestSudokuInternal: Sudoku, IDisposable
     {
 
         /// <summary> <!-- {{{1 --> SetUp
         /// </summary>
-        [SetUp]
-        public void SetUp()
+        public TestSudokuInternal()
         {
         }
 
         /// <summary> <!-- {{{1 --> TearDown
         /// </summary>
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
         }
 
         /// <summary> <!-- {{{1 --> Verify for board instance
         /// </summary>
-        [Test]
+        [Fact]
         public void TestBoard()
         {
-            Assert.AreEqual(81, this.board.Length);
+            Assert.Equal(81, this.board.Length);
         }
 
         /// <summary> <!-- {{{1 --> Verify for row
         /// </summary>
-        [Test]
+        [Fact]
         public void TestHouseRow()
         {
             var index_list = new int[][]
@@ -111,14 +105,14 @@ namespace SudokuSolverTest
                     var idx = index_list[x][y];
                     var exp = this.board[idx];
                     var ans = cells.ElementAt(y);
-                    Assert.IsTrue(exp.Equals(ans), "Invalid cell: {0}: {1}", x, y);
+                    Assert.True(exp.Equals(ans));
                 }
             }
         }
 
         /// <summary> <!-- {{{1 --> Verify for column
         /// </summary>
-        [Test]
+        [Fact]
         public void TestHouseCol()
         {
             var index_list = new int[][]
@@ -141,14 +135,14 @@ namespace SudokuSolverTest
                     var idx = index_list[x][y];
                     var exp = this.board[idx];
                     var ans = cells.ElementAt(y);
-                    Assert.IsTrue(exp.Equals(ans), "Invalid cell: {0}: {1}", x, y);
+                    Assert.True(exp.Equals(ans));
                 }
             }
         }
 
         /// <summary> <!-- {{{1 --> Verify for box
         /// </summary>
-        [Test]
+        [Fact]
         public void TestHouseBox()
         {
             var index_list = new int[][]
@@ -171,7 +165,7 @@ namespace SudokuSolverTest
                     var idx = index_list[x][y];
                     var exp = this.board[idx];
                     var ans = cells.ElementAt(y);
-                    Assert.IsTrue(exp.Equals(ans), "Invalid cell: {0}: {1}", x, y);
+                    Assert.True(exp.Equals(ans));
                 }
             }
         }
